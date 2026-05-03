@@ -14,6 +14,16 @@ def choose_word(word_bank):
     answer_word = random.choice(word_bank)
     return answer_word
 
+
+def print_grid(grid):
+    '''takes the list of guessed words and prints it beautiful using rich library'''
+    for col in grid:
+        rprint('['+ col[0][1] + ']' + col[0][0] + ' ' + 
+               '['+ col[1][1] + ']' + col[1][0] + ' ' + 
+               '['+ col[2][1] + ']' + col[2][0] + ' ' + 
+               '['+ col[3][1] + ']' + col[3][0] + ' ' + 
+               '['+ col[4][1] + ']' + col[4][0] + ' ')
+
 def verify_word(guess_word, answer_word, current_column):
     cols = [''] * 5
 
@@ -21,16 +31,14 @@ def verify_word(guess_word, answer_word, current_column):
         cols = ['green'] * 5
     else:
         for i in range(len(guess_word)):
-            print(i, cols)
             if guess_word[i] == answer_word[i]:
                 cols[i] = 'green'
             elif guess_word[i] in answer_word:
                 cols[i] = 'yellow'
             else:
-                cols[i] = 'grey'
+                cols[i] = 'black'
     
     i = 0
-    print(cols)
     for item in grid[current_column]:
         item[1] = cols[i]
         i += 1
@@ -46,7 +54,6 @@ reset_grid = [
 ]
 
 grid = reset_grid.copy()
-rprint(grid)
 
 current_column = 0
 loop = True
@@ -54,9 +61,9 @@ loop = True
 while loop:
     guess = ''
     guess = input('input guess: ')
-    print(guess)
 
-    if guess == 'quit':
+    if guess == 'q':
+        print('quitting...')
         loop = False
     elif len(guess) == 5 and is_valid_word(guess):
         verify_word(guess, answer_word, current_column)
@@ -66,11 +73,11 @@ while loop:
             i += 1
         current_column += 1
         guess = ''
-        
-        rprint(grid)
+
+        print_grid(grid)
         print(current_column, '/', len(grid))
     else:
-        print('enter a valid word')
+        rprint('enter a [italic bold]valid word')
                 
     if current_column > 4:
         print(current_column)
